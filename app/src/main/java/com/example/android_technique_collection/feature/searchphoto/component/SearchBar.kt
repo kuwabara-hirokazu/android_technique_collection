@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +47,7 @@ fun SearchBar(
                 value = searchQuery,
                 onValueChange = onSearchTextChanged,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(fraction = 0.95f)
                     .padding(2.dp)
                     .focusRequester(focusRequester),
                 placeholder = {
@@ -81,4 +82,14 @@ fun SearchBar(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
+}
+
+@Preview
+@Composable
+private fun SearchBarPreview() {
+    SearchBar(
+        searchQuery = "",
+        onSearchTextChanged = {},
+        onDone = {}
+    )
 }
