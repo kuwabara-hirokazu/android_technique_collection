@@ -1,7 +1,18 @@
 package com.example.android_technique_collection.feature.searchphoto.state
 
 sealed interface SearchPhotoViewState {
-    data object Loading : SearchPhotoViewState
-    data class Shown(val photos: List<Photo>) : SearchPhotoViewState
-    data class Failure(val error: String) : SearchPhotoViewState
+
+    val query: String
+
+    data class Loading(
+        override val query: String
+    ) : SearchPhotoViewState
+    data class Shown(
+        override val query: String,
+        val photos: List<Photo>
+    ) : SearchPhotoViewState
+    data class Failure(
+        override val query: String,
+        val error: String
+    ) : SearchPhotoViewState
 }

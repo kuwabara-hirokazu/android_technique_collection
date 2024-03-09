@@ -29,7 +29,6 @@ fun SearchPhotoScreen(
     val uiState by viewModel.uiState.collectAsState()
     SearchPhotoScreen(
         uiState = uiState,
-        query = viewModel.query,
         onSearchTextChanged = viewModel::updateQuery,
         onInputDone = viewModel::searchPhotos
     )
@@ -38,7 +37,6 @@ fun SearchPhotoScreen(
 @Composable
 private fun SearchPhotoScreen(
     uiState: SearchPhotoViewState,
-    query: String,
     onSearchTextChanged: (String) -> Unit,
     onInputDone: () -> Unit,
     modifier: Modifier = Modifier
@@ -46,7 +44,7 @@ private fun SearchPhotoScreen(
     Scaffold(
         topBar = {
             SearchBar(
-                searchQuery = query,
+                searchQuery = uiState.query,
                 onSearchTextChanged = onSearchTextChanged,
                 onDone = onInputDone,
                 placeHolder = "高解像度写真の検索",
@@ -79,7 +77,7 @@ private fun SearchPhotoScreen(
                     )
                 }
             }
-            SearchPhotoViewState.Loading -> {
+            is SearchPhotoViewState.Loading -> {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -107,9 +105,9 @@ fun SearchPhotoScreenPreview() {
         )
         SearchPhotoScreen(
             uiState = SearchPhotoViewState.Shown(
+                query = "",
                 photos = listOf(photo, photo, photo, photo)
             ),
-            query = "",
             {},{}
         )
     }

@@ -1,8 +1,5 @@
 package com.example.android_technique_collection.feature.searchphoto
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_technique_collection.domain.repository.PhotoRepository
@@ -20,32 +17,33 @@ class SearchPhotoViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SearchPhotoViewState> =
-        MutableStateFlow(SearchPhotoViewState.Loading)
+        MutableStateFlow(SearchPhotoViewState.Loading("Android"))
     val uiState = this._uiState.asStateFlow()
-
-    private var _query by mutableStateOf("Android")
-    val query: String
-        get() = _query
-
 
     init {
         searchPhotos()
     }
 
     fun updateQuery(newQuery: String) {
-        _query = newQuery
+        when (val state = _uiState.value) {
+            is SearchPhotoViewState.Failure -> _uiState.value = state.copy(query = newQuery)
+            is SearchPhotoViewState.Loading -> _uiState.value = state.copy(query = newQuery)
+            is SearchPhotoViewState.Shown -> _uiState.value = state.copy(query = newQuery)
+        }
     }
 
     fun searchPhotos() {
-        _uiState.value = SearchPhotoViewState.Loading
+        val query = _uiState.value.query
+        _uiState.value = SearchPhotoViewState.Loading(query)
         viewModelScope.launch {
             try {
                 val photos = repository.searchPhotos(query).results?.map {
                     Photo.from(it)
                 } ?: emptyList()
-                _uiState.value = SearchPhotoViewState.Shown(photos = photos)
+                _uiState.value = SearchPhotoViewState.Shown(query = query, photos = photos)
             } catch (e: Exception) {
-                _uiState.value = SearchPhotoViewState.Failure(error = e.message.toString())
+                _uiState.value =
+                    SearchPhotoViewState.Failure(query = query, error = e.message.toString())
             }
         }
     }
