@@ -1,5 +1,8 @@
 package com.example.android_technique_collection.feature.searchphoto
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_technique_collection.domain.repository.PhotoRepository
@@ -20,11 +23,20 @@ class SearchPhotoViewModel @Inject constructor(
         MutableStateFlow(SearchPhotoViewState.Loading)
     val uiState = this._uiState.asStateFlow()
 
+    private var _query by mutableStateOf("Android")
+    val query: String
+        get() = _query
+
+
     init {
-        searchPhotos("Android")
+        searchPhotos()
     }
 
-    fun searchPhotos(query: String) {
+    fun updateQuery(newQuery: String) {
+        _query = newQuery
+    }
+
+    fun searchPhotos() {
         _uiState.value = SearchPhotoViewState.Loading
         viewModelScope.launch {
             try {

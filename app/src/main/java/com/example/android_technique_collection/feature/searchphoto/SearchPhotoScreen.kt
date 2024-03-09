@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.android_technique_collection.feature.searchphoto.component.PhotoThumbnailItem
+import com.example.android_technique_collection.feature.searchphoto.component.SearchBar
+import com.example.android_technique_collection.feature.searchphoto.state.Photo
 import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
 import com.example.android_technique_collection.ui.theme.Android_technique_collectionTheme
 
@@ -26,25 +28,40 @@ fun SearchPhotoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     SearchPhotoScreen(
-        uiState
+        uiState = uiState,
+        query = viewModel.query,
+        onSearchTextChanged = viewModel::updateQuery,
+        onInputDone = viewModel::searchPhotos
     )
 }
 
 @Composable
 private fun SearchPhotoScreen(
     uiState: SearchPhotoViewState,
+    query: String,
+    onSearchTextChanged: (String) -> Unit,
+    onInputDone: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        topBar = {
+            SearchBar(
+                searchQuery = query,
+                onSearchTextChanged = onSearchTextChanged,
+                onDone = onInputDone,
+                placeHolder = "高解像度写真の検索",
+            )
+        },
         modifier = modifier,
     ) { padding ->
         when(uiState) {
             is SearchPhotoViewState.Shown -> {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier.padding(padding)
+                ) {
                     items(uiState.photos) { photo ->
                         PhotoThumbnailItem(
                             photo = photo,
-                            modifier = Modifier.padding(padding)
                         )
                     }
                 }
@@ -77,13 +94,23 @@ private fun SearchPhotoScreen(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun SearchPhotoScreenPreview() {
     Android_technique_collectionTheme {
+        val photo = Photo(
+            photoId = "",
+            description = "Image description",
+            likes = 100,
+            imageUrl = "",
+            photographer = "Surface"
+        )
         SearchPhotoScreen(
-            SearchPhotoViewState.Loading
+            uiState = SearchPhotoViewState.Shown(
+                photos = listOf(photo, photo, photo, photo)
+            ),
+            query = "",
+            {},{}
         )
     }
 }
