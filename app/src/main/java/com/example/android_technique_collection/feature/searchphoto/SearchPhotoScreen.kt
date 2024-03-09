@@ -1,14 +1,21 @@
 package com.example.android_technique_collection.feature.searchphoto
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
 import com.example.android_technique_collection.ui.theme.Android_technique_collectionTheme
 
 @Composable
@@ -29,10 +36,34 @@ private fun SearchPhotoScreen(
     Scaffold(
         modifier = modifier,
     ) { padding ->
-        Text(
-            text = "Hello ${uiState.name}",
-            modifier = Modifier.padding(padding)
-        )
+        when(uiState) {
+            is SearchPhotoViewState.Shown -> {
+                Text(
+                    text = uiState.photos[0].imageUrl,
+                    modifier = Modifier.padding(padding)
+                )
+            }
+            is SearchPhotoViewState.Failure -> {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = uiState.error,
+                    )
+                }
+            }
+            SearchPhotoViewState.Loading -> {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
     }
 }
 
@@ -42,7 +73,7 @@ private fun SearchPhotoScreen(
 fun SearchPhotoScreenPreview() {
     Android_technique_collectionTheme {
         SearchPhotoScreen(
-            SearchPhotoViewState(name = "Android")
+            SearchPhotoViewState.Loading
         )
     }
 }
