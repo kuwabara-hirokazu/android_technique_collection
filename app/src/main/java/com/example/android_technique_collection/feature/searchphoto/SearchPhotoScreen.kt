@@ -118,7 +118,9 @@ fun SearchPhotoScreenPreview() {
         SearchPhotoScreen(
             uiState = SearchPhotoViewState.Shown(
                 query = "",
-                photos = listOf(photo, photo, photo, photo)
+                photos = listOf(photo, photo, photo, photo),
+                currentPage = 1,
+                hasNext = true
             ),
             {}, {}, {}
         )

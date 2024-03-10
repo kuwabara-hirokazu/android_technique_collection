@@ -39,13 +39,23 @@ class SearchPhotoViewModel @Inject constructor(
         _uiState.value = SearchPhotoViewState.Loading(query)
         viewModelScope.launch {
             try {
-                val photos = repository.searchPhotos(query).searchPhotoResults?.map {
+                val response = repository.searchPhotos(
+                    query = query,
+                    page = 1,
+                    perPage = PER_PAGE
+                )
+                val photos = response.searchPhotoResults.map {
                     Photo.from(it)
-                } ?: emptyList()
+                }
                 if (photos.isEmpty()) {
                     _uiState.value = SearchPhotoViewState.NoResult(query = query)
                 } else {
-                    _uiState.value = SearchPhotoViewState.Shown(query = query, photos = photos)
+                    _uiState.value = SearchPhotoViewState.Shown(
+                        query = query,
+                        photos = photos,
+                        currentPage = 1,
+                        hasNext = response.totalPages > 1
+                    )
                 }
             } catch (e: Exception) {
                 _uiState.value =
@@ -59,5 +69,9 @@ class SearchPhotoViewModel @Inject constructor(
         viewModelScope.launch {
 
         }
+    }
+
+    companion object {
+        const val PER_PAGE = 10
     }
 }

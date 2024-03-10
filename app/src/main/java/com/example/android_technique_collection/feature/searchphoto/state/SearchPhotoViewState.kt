@@ -10,7 +10,9 @@ sealed interface SearchPhotoViewState {
 
     data class Shown(
         override val query: String,
-        val photos: List<Photo>
+        val photos: List<Photo>,
+        val currentPage: Int,
+        val hasNext: Boolean
     ) : SearchPhotoViewState
 
     data class NoResult(

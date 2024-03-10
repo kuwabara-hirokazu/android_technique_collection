@@ -7,8 +7,8 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class SearchPhotosResult(
     @Json(name = "results")
-    val searchPhotoResults: List<SearchPhotoResult>?,
-    val total: Int?,
+    val searchPhotoResults: List<SearchPhotoResult>,
+    val total: Int,
     @Json(name = "total_pages")
-    val totalPages: Int?
+    val totalPages: Int
 )
