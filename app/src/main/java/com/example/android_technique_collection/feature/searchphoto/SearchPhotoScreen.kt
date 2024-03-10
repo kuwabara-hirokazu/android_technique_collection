@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.android_technique_collection.feature.searchphoto.component.PhotoThumbnailItem
 import com.example.android_technique_collection.feature.searchphoto.component.SearchBar
+import com.example.android_technique_collection.feature.searchphoto.section.SearchPhotoResultSection
 import com.example.android_technique_collection.feature.searchphoto.state.Photo
 import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
 import com.example.android_technique_collection.ui.common.theme.Android_technique_collectionTheme
@@ -54,15 +52,10 @@ private fun SearchPhotoScreen(
     ) { padding ->
         when(uiState) {
             is SearchPhotoViewState.Shown -> {
-                LazyColumn(
+                SearchPhotoResultSection(
+                    uiState = uiState,
                     modifier = Modifier.padding(padding)
-                ) {
-                    items(uiState.photos) { photo ->
-                        PhotoThumbnailItem(
-                            photo = photo,
-                        )
-                    }
-                }
+                )
             }
             is SearchPhotoViewState.NoResult -> {
                 Column(
