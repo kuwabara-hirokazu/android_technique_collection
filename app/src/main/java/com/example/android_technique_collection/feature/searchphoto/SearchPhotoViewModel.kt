@@ -3,6 +3,7 @@ package com.example.android_technique_collection.feature.searchphoto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_technique_collection.domain.repository.PhotoRepository
+import com.example.android_technique_collection.feature.searchphoto.state.PagingState
 import com.example.android_technique_collection.feature.searchphoto.state.Photo
 import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -65,9 +66,36 @@ class SearchPhotoViewModel @Inject constructor(
     }
 
     fun paging() {
-        val query = _uiState.value.query
-        viewModelScope.launch {
+        val currentState = _uiState.value
+        if (currentState !is SearchPhotoViewState.Shown) return
+        if (!currentState.canPaging) return
 
+        _uiState.value = currentState.copy(
+            pagingState = PagingState.PAGING,
+        )
+
+        val nextPage = currentState.currentPage + 1
+        viewModelScope.launch {
+            try {
+                val response = repository.searchPhotos(
+                    query = currentState.query,
+                    page = nextPage,
+                    perPage = PER_PAGE
+                )
+                val photos = response.searchPhotoResults.map {
+                    Photo.from(it)
+                }
+                _uiState.value = currentState.copy(
+                    photos = currentState.photos + photos,
+                    pagingState = PagingState.NONE,
+                    currentPage = nextPage,
+                    hasNext = response.totalPages > nextPage
+                )
+            } catch (e: Exception) {
+                _uiState.value = currentState.copy(
+                    pagingState = PagingState.ERROR,
+                )
+            }
         }
     }
 

@@ -11,9 +11,12 @@ sealed interface SearchPhotoViewState {
     data class Shown(
         override val query: String,
         val photos: List<Photo>,
+        val pagingState: PagingState = PagingState.NONE,
         val currentPage: Int,
-        val hasNext: Boolean
-    ) : SearchPhotoViewState
+        private val hasNext: Boolean
+    ) : SearchPhotoViewState {
+        val canPaging = pagingState == PagingState.NONE && hasNext
+    }
 
     data class NoResult(
         override val query: String
