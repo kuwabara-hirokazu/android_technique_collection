@@ -23,3 +23,18 @@ data class User(
     val twitterUsername: String?,
     val username: String?
 )
+
+@JsonClass(generateAdapter = true)
+data class LinksX(
+    val html: String?,
+    val likes: String?,
+    val photos: String?,
+    val self: String?
+)
+
+@JsonClass(generateAdapter = true)
+data class ProfileImage(
+    val large: String?,
+    val medium: String?,
+    val small: String?
+)

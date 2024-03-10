@@ -1,6 +1,6 @@
 package com.example.android_technique_collection.feature.searchphoto.state
 
-import com.example.android_technique_collection.domain.model.unsplash.Result
+import com.example.android_technique_collection.domain.model.unsplash.SearchPhotoResult
 
 data class Photo(
     val photoId: String,
@@ -10,7 +10,7 @@ data class Photo(
     val photographer: String?,
 ) {
     companion object {
-        fun from(searchPhotoResult: Result): Photo {
+        fun from(searchPhotoResult: SearchPhotoResult): Photo {
             if (searchPhotoResult.id == null) throw NullPointerException("photoIdがnullです")
             if (searchPhotoResult.urls?.raw == null) throw NullPointerException("imageUrlがnullです")
             return Photo(

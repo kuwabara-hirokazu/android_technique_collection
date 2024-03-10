@@ -37,7 +37,7 @@ class SearchPhotoViewModel @Inject constructor(
         _uiState.value = SearchPhotoViewState.Loading(query)
         viewModelScope.launch {
             try {
-                val photos = repository.searchPhotos(query).results?.map {
+                val photos = repository.searchPhotos(query).searchPhotoResults?.map {
                     Photo.from(it)
                 } ?: emptyList()
                 _uiState.value = SearchPhotoViewState.Shown(query = query, photos = photos)
