@@ -64,6 +64,19 @@ private fun SearchPhotoScreen(
                     }
                 }
             }
+            is SearchPhotoViewState.NoResult -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = "一致する検索結果がありません",
+                    )
+                }
+            }
             is SearchPhotoViewState.Failure -> {
                 Column(
                     modifier = Modifier

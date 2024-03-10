@@ -7,10 +7,16 @@ sealed interface SearchPhotoViewState {
     data class Loading(
         override val query: String
     ) : SearchPhotoViewState
+
     data class Shown(
         override val query: String,
         val photos: List<Photo>
     ) : SearchPhotoViewState
+
+    data class NoResult(
+        override val query: String
+    ) : SearchPhotoViewState
+
     data class Failure(
         override val query: String,
         val error: String

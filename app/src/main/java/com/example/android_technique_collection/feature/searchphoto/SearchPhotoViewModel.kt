@@ -29,18 +29,24 @@ class SearchPhotoViewModel @Inject constructor(
             is SearchPhotoViewState.Failure -> _uiState.value = state.copy(query = newQuery)
             is SearchPhotoViewState.Loading -> _uiState.value = state.copy(query = newQuery)
             is SearchPhotoViewState.Shown -> _uiState.value = state.copy(query = newQuery)
+            is SearchPhotoViewState.NoResult -> _uiState.value = state.copy(query = newQuery)
         }
     }
 
     fun searchPhotos() {
         val query = _uiState.value.query
+        if (query.isBlank()) return
         _uiState.value = SearchPhotoViewState.Loading(query)
         viewModelScope.launch {
             try {
                 val photos = repository.searchPhotos(query).searchPhotoResults?.map {
                     Photo.from(it)
                 } ?: emptyList()
-                _uiState.value = SearchPhotoViewState.Shown(query = query, photos = photos)
+                if (photos.isEmpty()) {
+                    _uiState.value = SearchPhotoViewState.NoResult(query = query)
+                } else {
+                    _uiState.value = SearchPhotoViewState.Shown(query = query, photos = photos)
+                }
             } catch (e: Exception) {
                 _uiState.value =
                     SearchPhotoViewState.Failure(query = query, error = e.message.toString())
