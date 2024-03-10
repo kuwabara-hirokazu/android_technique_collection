@@ -11,8 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.android_technique_collection.feature.searchphoto.SearchPhotoScreen
-import com.example.android_technique_collection.ui.theme.Android_technique_collectionTheme
-import com.example.android_technique_collection.ui.theme.ScreenRoute
+import com.example.android_technique_collection.ui.common.theme.Android_technique_collectionTheme
+import com.example.android_technique_collection.ui.common.route.ScreenRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

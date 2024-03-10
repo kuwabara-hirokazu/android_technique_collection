@@ -20,7 +20,7 @@ import com.example.android_technique_collection.feature.searchphoto.component.Ph
 import com.example.android_technique_collection.feature.searchphoto.component.SearchBar
 import com.example.android_technique_collection.feature.searchphoto.state.Photo
 import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
-import com.example.android_technique_collection.ui.theme.Android_technique_collectionTheme
+import com.example.android_technique_collection.ui.common.theme.Android_technique_collectionTheme
 
 @Composable
 fun SearchPhotoScreen(
