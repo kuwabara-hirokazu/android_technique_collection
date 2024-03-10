@@ -71,7 +71,10 @@ fun SearchPhotoResultSection(
             when (page) {
                 PhotoResultDisplayType.LIST.ordinal -> {
                     LazyColumn {
-                        items(uiState.photos) { photo ->
+                        items(
+                            items = uiState.photos,
+                            key = { photo -> photo.photoId }
+                        ) { photo ->
                             PhotoThumbnailItem(
                                 photo = photo,
                             )
