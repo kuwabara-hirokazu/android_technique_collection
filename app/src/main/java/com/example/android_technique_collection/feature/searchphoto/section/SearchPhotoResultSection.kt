@@ -86,7 +86,10 @@ fun SearchPhotoResultSection(
                     LazyVerticalStaggeredGrid(
                         columns = StaggeredGridCells.Fixed(2),
                         content = {
-                            items(uiState.photos) { photo ->
+                            items(
+                                items = uiState.photos,
+                                key = { photo -> photo.photoId }
+                            ) { photo ->
                                 AsyncImage(
                                     model = photo.imageUrl,
                                     contentScale = ContentScale.Crop,
