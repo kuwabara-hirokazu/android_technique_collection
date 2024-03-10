@@ -28,7 +28,8 @@ fun SearchPhotoScreen(
     SearchPhotoScreen(
         uiState = uiState,
         onSearchTextChanged = viewModel::updateQuery,
-        onInputDone = viewModel::searchPhotos
+        onInputDone = viewModel::searchPhotos,
+        onReachedToLastItem = viewModel::paging
     )
 }
 
@@ -37,6 +38,7 @@ private fun SearchPhotoScreen(
     uiState: SearchPhotoViewState,
     onSearchTextChanged: (String) -> Unit,
     onInputDone: () -> Unit,
+    onReachedToLastItem: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -54,6 +56,7 @@ private fun SearchPhotoScreen(
             is SearchPhotoViewState.Shown -> {
                 SearchPhotoResultSection(
                     uiState = uiState,
+                    onReachedToLastItem = onReachedToLastItem,
                     modifier = Modifier.padding(padding)
                 )
             }
@@ -117,7 +120,7 @@ fun SearchPhotoScreenPreview() {
                 query = "",
                 photos = listOf(photo, photo, photo, photo)
             ),
-            {}, {}
+            {}, {}, {}
         )
     }
 }

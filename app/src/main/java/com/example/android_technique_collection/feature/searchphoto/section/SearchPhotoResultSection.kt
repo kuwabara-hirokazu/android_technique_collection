@@ -19,6 +19,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchPhotoResultSection(
     uiState: SearchPhotoViewState.Shown,
+    onReachedToLastItem: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -79,6 +81,11 @@ fun SearchPhotoResultSection(
                                 photo = photo,
                             )
                         }
+                        item(key = true) {
+                            LaunchedEffect(key1 = true) {
+                                onReachedToLastItem.invoke()
+                            }
+                        }
                     }
                 }
 
@@ -98,6 +105,11 @@ fun SearchPhotoResultSection(
                                         .fillMaxWidth()
                                         .wrapContentHeight()
                                 )
+                            }
+                            item(key = true) {
+                                LaunchedEffect(key1 = true) {
+                                    onReachedToLastItem.invoke()
+                                }
                             }
                         },
                         modifier = Modifier.fillMaxSize()

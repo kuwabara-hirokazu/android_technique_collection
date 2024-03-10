@@ -53,4 +53,11 @@ class SearchPhotoViewModel @Inject constructor(
             }
         }
     }
+
+    fun paging() {
+        val query = _uiState.value.query
+        viewModelScope.launch {
+
+        }
+    }
 }
