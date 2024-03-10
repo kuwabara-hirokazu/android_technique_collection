@@ -66,12 +66,11 @@ fun SearchPhotoResultSection(
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier
-                .fillMaxHeight()
+            modifier = Modifier.fillMaxHeight()
         ) { page: Int ->
             when (page) {
                 PhotoResultDisplayType.LIST.ordinal -> {
-                    LazyColumn{
+                    LazyColumn {
                         items(uiState.photos) { photo ->
                             PhotoThumbnailItem(
                                 photo = photo,

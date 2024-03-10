@@ -50,13 +50,14 @@ private fun SearchPhotoScreen(
         },
         modifier = modifier,
     ) { padding ->
-        when(uiState) {
+        when (uiState) {
             is SearchPhotoViewState.Shown -> {
                 SearchPhotoResultSection(
                     uiState = uiState,
                     modifier = Modifier.padding(padding)
                 )
             }
+
             is SearchPhotoViewState.NoResult -> {
                 Column(
                     modifier = Modifier
@@ -70,6 +71,7 @@ private fun SearchPhotoScreen(
                     )
                 }
             }
+
             is SearchPhotoViewState.Failure -> {
                 Column(
                     modifier = Modifier
@@ -83,6 +85,7 @@ private fun SearchPhotoScreen(
                     )
                 }
             }
+
             is SearchPhotoViewState.Loading -> {
                 Column(
                     modifier = Modifier
@@ -114,7 +117,7 @@ fun SearchPhotoScreenPreview() {
                 query = "",
                 photos = listOf(photo, photo, photo, photo)
             ),
-            {},{}
+            {}, {}
         )
     }
 }
