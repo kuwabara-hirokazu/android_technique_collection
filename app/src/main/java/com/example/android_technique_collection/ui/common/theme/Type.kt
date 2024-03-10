@@ -1,4 +1,4 @@
-package com.example.android_technique_collection.ui.theme
+package com.example.android_technique_collection.ui.common.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
