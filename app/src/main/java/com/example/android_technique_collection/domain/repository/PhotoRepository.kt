@@ -4,5 +4,9 @@ import com.example.android_technique_collection.domain.model.unsplash.SearchPhot
 
 interface PhotoRepository {
 
-    suspend fun searchPhotos(query: String): SearchPhotosResult
+    suspend fun searchPhotos(
+        query: String,
+        page: Int,
+        perPage: Int,
+    ): SearchPhotosResult
 }

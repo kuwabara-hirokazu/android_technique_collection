@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.android_technique_collection.feature.searchphoto.component.SearchBar
 import com.example.android_technique_collection.feature.searchphoto.section.SearchPhotoResultSection
+import com.example.android_technique_collection.feature.searchphoto.state.PagingState
 import com.example.android_technique_collection.feature.searchphoto.state.Photo
 import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
 import com.example.android_technique_collection.ui.common.theme.Android_technique_collectionTheme
@@ -28,7 +29,8 @@ fun SearchPhotoScreen(
     SearchPhotoScreen(
         uiState = uiState,
         onSearchTextChanged = viewModel::updateQuery,
-        onInputDone = viewModel::searchPhotos
+        onInputDone = viewModel::searchPhotos,
+        onReachedToLastItem = viewModel::paging
     )
 }
 
@@ -37,6 +39,7 @@ private fun SearchPhotoScreen(
     uiState: SearchPhotoViewState,
     onSearchTextChanged: (String) -> Unit,
     onInputDone: () -> Unit,
+    onReachedToLastItem: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -54,6 +57,7 @@ private fun SearchPhotoScreen(
             is SearchPhotoViewState.Shown -> {
                 SearchPhotoResultSection(
                     uiState = uiState,
+                    onReachedToLastItem = onReachedToLastItem,
                     modifier = Modifier.padding(padding)
                 )
             }
@@ -115,9 +119,11 @@ fun SearchPhotoScreenPreview() {
         SearchPhotoScreen(
             uiState = SearchPhotoViewState.Shown(
                 query = "",
-                photos = listOf(photo, photo, photo, photo)
+                photos = listOf(photo, photo, photo, photo),
+                pagingState = PagingState.READY,
+                currentPage = 1,
             ),
-            {}, {}
+            {}, {}, {}
         )
     }
 }

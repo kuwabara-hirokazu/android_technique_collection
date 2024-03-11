@@ -7,8 +7,12 @@ import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
     private val unsplashApi: UnsplashApi
-): PhotoRepository {
-    override suspend fun searchPhotos(query: String): SearchPhotosResult {
-        return unsplashApi.searchPhotos(query)
+) : PhotoRepository {
+    override suspend fun searchPhotos(
+        query: String,
+        page: Int,
+        perPage: Int,
+    ): SearchPhotosResult {
+        return unsplashApi.searchPhotos(query, page, perPage)
     }
 }
