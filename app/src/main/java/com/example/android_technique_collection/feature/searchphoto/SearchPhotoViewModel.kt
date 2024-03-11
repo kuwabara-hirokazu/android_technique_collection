@@ -54,8 +54,8 @@ class SearchPhotoViewModel @Inject constructor(
                     _uiState.value = SearchPhotoViewState.Shown(
                         query = query,
                         photos = photos,
+                        pagingState = if (response.totalPages > 1) PagingState.READY else PagingState.FULL,
                         currentPage = 1,
-                        hasNext = response.totalPages > 1
                     )
                 }
             } catch (e: Exception) {
@@ -68,10 +68,10 @@ class SearchPhotoViewModel @Inject constructor(
     fun paging() {
         val currentState = _uiState.value
         if (currentState !is SearchPhotoViewState.Shown) return
-        if (!currentState.canPaging) return
+        if (currentState.pagingState != PagingState.READY) return
 
         _uiState.value = currentState.copy(
-            pagingState = PagingState.PAGING,
+            pagingState = PagingState.LOADING,
         )
 
         val nextPage = currentState.currentPage + 1
@@ -87,9 +87,8 @@ class SearchPhotoViewModel @Inject constructor(
                 }
                 _uiState.value = currentState.copy(
                     photos = currentState.photos + photos,
-                    pagingState = PagingState.NONE,
+                    pagingState = if (response.totalPages > nextPage) PagingState.READY else PagingState.FULL,
                     currentPage = nextPage,
-                    hasNext = response.totalPages > nextPage
                 )
             } catch (e: Exception) {
                 _uiState.value = currentState.copy(

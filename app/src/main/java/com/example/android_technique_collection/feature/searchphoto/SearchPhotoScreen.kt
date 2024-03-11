@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.android_technique_collection.feature.searchphoto.component.SearchBar
 import com.example.android_technique_collection.feature.searchphoto.section.SearchPhotoResultSection
+import com.example.android_technique_collection.feature.searchphoto.state.PagingState
 import com.example.android_technique_collection.feature.searchphoto.state.Photo
 import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
 import com.example.android_technique_collection.ui.common.theme.Android_technique_collectionTheme
@@ -119,8 +120,8 @@ fun SearchPhotoScreenPreview() {
             uiState = SearchPhotoViewState.Shown(
                 query = "",
                 photos = listOf(photo, photo, photo, photo),
+                pagingState = PagingState.READY,
                 currentPage = 1,
-                hasNext = true
             ),
             {}, {}, {}
         )
