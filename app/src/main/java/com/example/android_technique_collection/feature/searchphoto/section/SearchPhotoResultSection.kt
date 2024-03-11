@@ -140,6 +140,37 @@ fun SearchPhotoResultSection(
                                         .wrapContentHeight()
                                 )
                             }
+                            items(
+                                count = 2,
+                            ) {
+                                when (uiState.pagingState) {
+                                    PagingState.FULL -> {}
+
+                                    // PagingState.READYの時点で予めインジケーターを追加しておくことで、リスト末尾に到達した際に表示されているようにする。
+                                    // リスト末尾にアイテムを追加した際にインジケーターが画面外に配置されてしまう問題を回避するため。
+                                    PagingState.READY, PagingState.LOADING -> {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(24.dp),
+                                            contentAlignment = Alignment.Center,
+                                        ) {
+                                            CircularProgressIndicator()
+                                        }
+                                    }
+
+                                    PagingState.ERROR -> {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(24.dp),
+                                            contentAlignment = Alignment.Center,
+                                        ) {
+                                            Text(text = "読み込みに失敗しました")
+                                        }
+                                    }
+                                }
+                            }
                             item(key = true) {
                                 LaunchedEffect(key1 = true) {
                                     onReachedToLastItem.invoke()
