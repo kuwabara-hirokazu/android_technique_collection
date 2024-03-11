@@ -2,37 +2,23 @@ package com.example.android_technique_collection.feature.searchphoto.section
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.example.android_technique_collection.R
-import com.example.android_technique_collection.feature.searchphoto.component.PhotoThumbnailItem
-import com.example.android_technique_collection.feature.searchphoto.state.PagingState
+import com.example.android_technique_collection.feature.searchphoto.component.PhotoGrid
+import com.example.android_technique_collection.feature.searchphoto.component.PhotoList
 import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
 import kotlinx.coroutines.launch
 
@@ -77,107 +63,18 @@ fun SearchPhotoResultSection(
         ) { page: Int ->
             when (page) {
                 PhotoResultDisplayType.LIST.ordinal -> {
-                    LazyColumn {
-                        items(
-                            items = uiState.photos,
-                            key = { photo -> photo.photoId }
-                        ) { photo ->
-                            PhotoThumbnailItem(
-                                photo = photo,
-                            )
-                        }
-                        item {
-                            when (uiState.pagingState) {
-                                PagingState.FULL -> {}
-
-                                // PagingState.READYの時点で予めインジケーターを追加しておくことで、リスト末尾に到達した際に表示されているようにする。
-                                // リスト末尾にアイテムを追加した際にインジケーターが画面外に配置されてしまう問題を回避するため。
-                                PagingState.READY, PagingState.LOADING -> {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(24.dp),
-                                        contentAlignment = Alignment.Center,
-                                    ) {
-                                        CircularProgressIndicator()
-                                    }
-                                }
-
-                                PagingState.ERROR -> {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(24.dp),
-                                        contentAlignment = Alignment.Center,
-                                    ) {
-                                        Text(text = "読み込みに失敗しました")
-                                    }
-                                }
-                            }
-                        }
-                        item(key = true) {
-                            LaunchedEffect(key1 = true) {
-                                onReachedToLastItem.invoke()
-                            }
-                        }
-                    }
+                    PhotoList(
+                        photos = uiState.photos,
+                        pagingState = uiState.pagingState,
+                        onReachedToLastItem = onReachedToLastItem
+                    )
                 }
 
                 PhotoResultDisplayType.GRID.ordinal -> {
-                    LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Fixed(2),
-                        content = {
-                            items(
-                                items = uiState.photos,
-                                key = { photo -> photo.photoId }
-                            ) { photo ->
-                                AsyncImage(
-                                    model = photo.imageUrl,
-                                    contentScale = ContentScale.Crop,
-                                    contentDescription = photo.description,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .wrapContentHeight()
-                                )
-                            }
-                            items(
-                                count = 2,
-                            ) {
-                                when (uiState.pagingState) {
-                                    PagingState.FULL -> {}
-
-                                    // PagingState.READYの時点で予めインジケーターを追加しておくことで、リスト末尾に到達した際に表示されているようにする。
-                                    // リスト末尾にアイテムを追加した際にインジケーターが画面外に配置されてしまう問題を回避するため。
-                                    PagingState.READY, PagingState.LOADING -> {
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(24.dp),
-                                            contentAlignment = Alignment.Center,
-                                        ) {
-                                            CircularProgressIndicator()
-                                        }
-                                    }
-
-                                    PagingState.ERROR -> {
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(24.dp),
-                                            contentAlignment = Alignment.Center,
-                                        ) {
-                                            Text(text = "読み込みに失敗しました")
-                                        }
-                                    }
-                                }
-                            }
-                            item(key = true) {
-                                LaunchedEffect(key1 = true) {
-                                    onReachedToLastItem.invoke()
-                                }
-                            }
-                        },
-                        modifier = Modifier.fillMaxSize()
+                    PhotoGrid(
+                        photos = uiState.photos,
+                        pagingState = uiState.pagingState,
+                        onReachedToLastItem = onReachedToLastItem
                     )
                 }
             }
