@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,12 +33,20 @@ fun ChartScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ChartScreen(
     uiState: ChartState,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "グラフ画面")
+                },
+            )
+        },
         modifier = modifier,
     ) { padding ->
         Column(
