@@ -2,7 +2,9 @@ package com.example.android_technique_collection.feature.chart
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.android_technique_collection.feature.chart.component.BarChart
 import com.example.android_technique_collection.feature.chart.component.PieCharts
 import com.example.android_technique_collection.feature.chart.state.ChartState
 import com.example.android_technique_collection.feature.chart.state.PieChartsElement
@@ -64,6 +67,8 @@ private fun ChartScreen(
                            elements = uiState.pieChartsElements,
                            modifier = Modifier.size(100.dp)
                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        BarChart()
                     }
                 }
                 is ChartState.Failure -> {
