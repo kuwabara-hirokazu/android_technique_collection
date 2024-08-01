@@ -22,7 +22,8 @@ import com.example.android_technique_collection.ui.common.route.ScreenRoute
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavController
+    onNavigateToSearch: () -> Unit,
+    onNavigateToChart: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -39,7 +40,7 @@ fun HomeScreen(
         ) {
             Spacer(modifier = Modifier.height(40.dp))
             Button(
-                onClick = { navController.navigate(ScreenRoute.SearchScreen.route) },
+                onClick = onNavigateToSearch,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -47,7 +48,7 @@ fun HomeScreen(
                 Text(text = "検索画面")
             }
             Button(
-                onClick = { navController.navigate(ScreenRoute.ChartScreen.route) },
+                onClick = onNavigateToChart,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -61,7 +62,5 @@ fun HomeScreen(
 @Preview
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen(
-        navController = rememberNavController()
-    )
+    HomeScreen({},{})
 }

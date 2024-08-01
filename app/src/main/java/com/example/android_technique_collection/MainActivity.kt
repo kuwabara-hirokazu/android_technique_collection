@@ -33,7 +33,14 @@ class MainActivity : ComponentActivity() {
                         startDestination = ScreenRoute.HomeScreen.route
                     ) {
                         composable(ScreenRoute.HomeScreen.route) {
-                            HomeScreen(navController)
+                            HomeScreen(
+                                onNavigateToSearch = {
+                                    navController.navigate(ScreenRoute.SearchScreen.route)
+                                },
+                                onNavigateToChart = {
+                                    navController.navigate(ScreenRoute.ChartScreen.route)
+                                }
+                            )
                         }
                         composable(ScreenRoute.SearchScreen.route) {
                             SearchPhotoScreen()
