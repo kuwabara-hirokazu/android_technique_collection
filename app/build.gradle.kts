@@ -96,3 +96,7 @@ dependencies {
 kapt {
     correctErrorTypes = true
 }
+
+roborazzi {
+    outputDir.set(rootProject.file("screenshots"))
+}
