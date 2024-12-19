@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -76,6 +77,9 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.roborazzi.rule)
     testImplementation(libs.androidx.espresso.core)
     testImplementation(libs.androidx.ui.test.junit4)
 
