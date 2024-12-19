@@ -1,3 +1,5 @@
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+
 plugins {
     kotlin("kapt")
     alias(libs.plugins.androidApplication)
@@ -80,6 +82,8 @@ dependencies {
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.rule)
+    testImplementation(libs.roborazzi.compose.preview.scanner)
+    testImplementation(libs.compose.preview.scanner)
     testImplementation(libs.androidx.espresso.core)
     testImplementation(libs.androidx.ui.test.junit4)
 
@@ -99,4 +103,20 @@ kapt {
 
 roborazzi {
     outputDir.set(rootProject.file("screenshots"))
+    @OptIn(ExperimentalRoborazziApi::class)
+    generateComposePreviewRobolectricTests {
+        enable = true
+        // The package names to scan for Composable Previews.
+        packages = listOf("com.example.android_technique_collection")
+        // robolectricConfig will be passed to Robolectric's @Config annotation in the generated test class.
+        // See https://robolectric.org/configuring/ for more information.
+//        robolectricConfig = mapOf(
+//            "sdk" to "[32]",
+//            "qualifiers" to "RobolectricDeviceQualifiers.Pixel5",
+//        )
+        // If true, the private previews will be included in the test.
+//        includePrivatePreviews = true
+        // The fully qualified class name of the custom test class that implements [com.github.takahirom.roborazzi.ComposePreviewTester].
+//        testerQualifiedClassName = "com.example.MyCustomComposePreviewTester"
+    }
 }
