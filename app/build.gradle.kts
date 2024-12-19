@@ -2,6 +2,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.hiltAndroid)
 }
 
@@ -40,9 +41,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
