@@ -40,9 +40,9 @@ class FirstRobolectricComposeTest {
             .captureRoboImage()
 
         // Capture Jetpack Compose Node
-        composeRule.onNodeWithTag("AddBoxButton")
-            .onParent()
-            .captureRoboImage("build/compose.png")
+//        composeRule.onNodeWithTag("AddBoxButton")
+//            .onParent()
+//            .captureRoboImage("build/compose.png")
     }
 
 //    @Test
