@@ -109,17 +109,18 @@ private fun SearchPhotoScreen(
 @Composable
 fun SearchPhotoScreenPreview() {
     Android_technique_collectionTheme {
-        val photo = Photo(
-            photoId = "",
-            description = "Image description",
-            likes = 100,
-            imageUrl = "",
-            photographer = "Surface"
-        )
         SearchPhotoScreen(
             uiState = SearchPhotoViewState.Shown(
                 query = "",
-                photos = listOf(photo, photo, photo, photo),
+                photos = List(5) { index ->
+                    Photo(
+                        photoId = index.toString(),
+                        description = "Image description",
+                        likes = 100,
+                        imageUrl = "",
+                        photographer = "Surface"
+                    )
+                },
                 pagingState = PagingState.READY,
                 currentPage = 1,
             ),
