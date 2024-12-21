@@ -28,8 +28,11 @@ class ComposePreviewTest(
         val filePath = "$DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH/$fileName.png" // Preview関数名.png
 
         composeTestRule.apply {
+            mainClock.autoAdvance = false
             setContent { preview() }
+            mainClock.advanceTimeBy(1000)
             onRoot().captureRoboImage(filePath = filePath)
+            mainClock.autoAdvance = true
         }
     }
 
