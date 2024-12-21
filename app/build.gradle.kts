@@ -105,7 +105,7 @@ kapt {
 }
 
 roborazzi {
-    outputDir.set(rootProject.file("screenshots"))
+//    outputDir.set(rootProject.file("screenshots"))
     @OptIn(ExperimentalRoborazziApi::class)
     generateComposePreviewRobolectricTests {
         enable = true
