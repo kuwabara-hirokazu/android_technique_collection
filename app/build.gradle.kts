@@ -36,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         compose = true
@@ -54,7 +54,10 @@ android {
         unitTests {
             isIncludeAndroidResources = true
             all {
-                it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
+                it.systemProperties(
+                    "roborazzi.output.dir" to rootProject.file("screenshots").absolutePath,
+                    "robolectric.pixelCopyRenderMode" to "hardware"
+                )
             }
         }
     }
@@ -105,7 +108,7 @@ kapt {
 }
 
 roborazzi {
-//    outputDir.set(rootProject.file("screenshots"))
+    outputDir.set(rootProject.file("screenshots"))
     @OptIn(ExperimentalRoborazziApi::class)
     generateComposePreviewRobolectricTests {
         enable = true
