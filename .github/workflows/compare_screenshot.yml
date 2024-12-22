@@ -1,9 +1,6 @@
 name: compare screenshot
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
 
 permissions: {}
