@@ -94,8 +94,8 @@ jobs:
           BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         shell: bash
         run: |
-          # Find all the files ending with _compare.png in roborazzi folder
-          files=$(find . -type f -name "*_compare.png" | grep "screenshots/compare" | grep -E "^[a-zA-Z0-9_./-]+$")
+          # Find all the files ending with _compare.png in screenshots folder
+          files=$(find . -type f -name "*_compare.png" | grep "screenshots/compare/" | grep -E "^[a-zA-Z0-9_./-]+$")
           delimiter="$(openssl rand -hex 8)"
           {
             echo "reports<<${delimiter}"
