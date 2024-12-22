@@ -14,6 +14,7 @@ import com.example.android_technique_collection.ui.common.preview.MultiPreviews
 import com.github.takahirom.roborazzi.ComposePreviewTester
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureRoboImage
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.shadows.ShadowDisplay
 import sergio.sastre.composable.preview.scanner.android.AndroidComposablePreviewScanner
@@ -106,13 +107,18 @@ fun ApplyToCompositionLocal(
 
 }
 
-// 画面サイズを変更する（ナイトモードの設定もここで行える）
+// Robolectricの設定を適用する
 fun ComposablePreview<AndroidPreviewInfo>.myApplyToRobolectricConfiguration() {
     val preview = this
 
     // 画面サイズ
     if (preview.previewInfo.widthDp != -1 && preview.previewInfo.heightDp != -1) {
         setDisplaySize(preview.previewInfo.widthDp, preview.previewInfo.heightDp)
+    }
+
+    // ロケールの設定
+    if (preview.previewInfo.locale.isNotEmpty()) {
+        RuntimeEnvironment.setQualifiers("+${preview.previewInfo.locale}")
     }
 }
 

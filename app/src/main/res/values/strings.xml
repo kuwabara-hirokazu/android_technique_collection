@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">android_technique_collection</string>
-    <string name="photo_result_display_type_list">一覧表示</string>
-    <string name="photo_result_display_type_grid">グリッド表示</string>
+    <string name="photo_result_display_type_list">List</string>
+    <string name="photo_result_display_type_grid">Grid</string>
+    <string name="home_title">Home List</string>
+    <string name="to_search">Search Screen</string>
+    <string name="to_graph">Graph Screen</string>
 </resources>

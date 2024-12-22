@@ -13,7 +13,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.android_technique_collection.R
 import com.example.android_technique_collection.ui.common.preview.MultiPreviews
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +28,7 @@ fun HomeScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "導線一覧")
+                    Text(text = stringResource(R.string.home_title))
                 }
             )
         }
@@ -42,7 +44,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text(text = "検索画面")
+                Text(text = stringResource(R.string.to_search))
             }
             Button(
                 onClick = onNavigateToChart,
@@ -50,15 +52,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text(text = "グラフ画面")
-            }
-            Button(
-                onClick = onNavigateToChart,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(text = "TODO")
+                Text(text = stringResource(R.string.to_graph))
             }
         }
     }
