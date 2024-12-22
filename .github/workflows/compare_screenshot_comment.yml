@@ -94,25 +94,36 @@ jobs:
           BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         shell: bash
         run: |
-          # Find all the files ending with _compare.png in screenshots folder
+          # _compare.pngで終わるファイルをscreenshots/compare/フォルダから探す
+          echo "[_compare.png]で終わるファイルを検索中..."
           files=$(find . -type f -name "*_compare.png" | grep "screenshots/compare/" | grep -E "^[a-zA-Z0-9_./-]+$")
+          echo "見つかったファイル一覧: $files"
+          # ランダムな区切り文字を生成
           delimiter="$(openssl rand -hex 8)"
+          echo "生成された区切り文字: $delimiter"
           {
             echo "reports<<${delimiter}"
-          
-            # Create markdown table header
-            echo "Snapshot diff report vs base branch: ${{ github.event.workflow_run.event  == 'pull_request' && github.event.workflow_run.event.pull_request.base.ref || github.event.repository.default_branch }}"
-            echo "| File name | Image |"
+            # Markdownテーブルのヘッダーを作成
+            echo "ベースブランチとの差分スナップショットレポート: ${{ github.event.workflow_run.event  == 'pull_request' && github.event.workflow_run.event.pull_request.base.ref || github.event.repository.default_branch }}"
+            echo "| ファイル名 | イメージ |"
             echo "|-------|-------|"
           } >> "$GITHUB_OUTPUT"
-          
-          # Iterate over the files and create table rows
+          echo "MarkdownテーブルヘッダーをGITHUB_OUTPUTに書き込み完了"
+          # ファイルを1つずつ処理
           for file in $files; do
-            # Get the file name and insert newlines every 20 characters
+            echo "処理中のファイル: $file"
+            # ファイル名を取得し、20文字ごとに改行を挿入
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+            echo "処理後のファイル名: $fileName"
+            # テーブル行をGITHUB_OUTPUTに書き込み
             echo "| [$fileName](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file) | ![](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+            echo "$file のテーブル行をGITHUB_OUTPUTに書き込み完了"
           done
+          # GITHUB_OUTPUTへの書き込み終了
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
+          echo "区切り文字をGITHUB_OUTPUTに書き込み完了"
+          # スクリプトの終了を示す
+          echo "スクリプト実行完了"
       - name: Find Comment
         uses: peter-evans/find-comment@v3
         id: fc
