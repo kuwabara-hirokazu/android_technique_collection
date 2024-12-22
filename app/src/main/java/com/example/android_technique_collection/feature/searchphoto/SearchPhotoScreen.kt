@@ -19,6 +19,7 @@ import com.example.android_technique_collection.feature.searchphoto.section.Sear
 import com.example.android_technique_collection.feature.searchphoto.state.PagingState
 import com.example.android_technique_collection.feature.searchphoto.state.Photo
 import com.example.android_technique_collection.feature.searchphoto.state.SearchPhotoViewState
+import com.example.android_technique_collection.ui.common.preview.DelayedPreview
 import com.example.android_technique_collection.ui.common.theme.Android_technique_collectionTheme
 
 @Composable
@@ -106,6 +107,7 @@ private fun SearchPhotoScreen(
 }
 
 @Preview(showBackground = true)
+@DelayedPreview(delay = 2000)
 @Composable
 fun SearchPhotoScreenPreview() {
     Android_technique_collectionTheme {

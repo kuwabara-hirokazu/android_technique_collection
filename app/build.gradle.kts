@@ -36,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         compose = true
@@ -54,7 +54,10 @@ android {
         unitTests {
             isIncludeAndroidResources = true
             all {
-                it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
+                it.systemProperties(
+                    "roborazzi.output.dir" to rootProject.file("screenshots").absolutePath,
+                    "robolectric.pixelCopyRenderMode" to "hardware"
+                )
             }
         }
     }
@@ -104,22 +107,21 @@ kapt {
     correctErrorTypes = true
 }
 
+@OptIn(ExperimentalRoborazziApi::class)
 roborazzi {
-//    outputDir.set(rootProject.file("screenshots"))
-    @OptIn(ExperimentalRoborazziApi::class)
+    outputDir.set(rootProject.file("screenshots"))
+    compare.outputDir.set(rootProject.file("screenshots/compare"))
     generateComposePreviewRobolectricTests {
         enable = true
         // The package names to scan for Composable Previews.
-        packages = listOf("com.example.android_technique_collection")
+        packages = listOf("com.example.android_technique_collection.feature")
         // robolectricConfig will be passed to Robolectric's @Config annotation in the generated test class.
         // See https://robolectric.org/configuring/ for more information.
 //        robolectricConfig = mapOf(
 //            "sdk" to "[32]",
 //            "qualifiers" to "RobolectricDeviceQualifiers.Pixel5",
 //        )
-        // If true, the private previews will be included in the test.
-//        includePrivatePreviews = true
         // The fully qualified class name of the custom test class that implements [com.github.takahirom.roborazzi.ComposePreviewTester].
-//        testerQualifiedClassName = "com.example.MyCustomComposePreviewTester"
+        testerQualifiedClassName = "com.example.android_technique_collection.MyComposePreviewTester"
     }
 }

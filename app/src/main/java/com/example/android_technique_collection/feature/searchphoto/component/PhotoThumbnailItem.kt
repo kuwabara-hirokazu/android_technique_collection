@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.android_technique_collection.feature.searchphoto.state.Photo
+import com.example.android_technique_collection.ui.common.preview.DelayedPreview
 import com.example.android_technique_collection.ui.common.theme.Android_technique_collectionTheme
 
 @Composable
@@ -86,6 +87,7 @@ fun PhotoThumbnailItem(
 }
 
 @Preview(showBackground = true)
+@DelayedPreview(delay = 2000)
 @Composable
 fun PhotoThumbnailItemPreview() {
     val photo = Photo(
