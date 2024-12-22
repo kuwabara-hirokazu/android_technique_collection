@@ -13,11 +13,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.android_technique_collection.ui.common.route.ScreenRoute
+import com.example.android_technique_collection.ui.common.preview.MultiPreviews
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +64,7 @@ fun HomeScreen(
     }
 }
 
-@Preview
+@MultiPreviews
 @Composable
 private fun HomeScreenPreview() {
     HomeScreen({},{})
