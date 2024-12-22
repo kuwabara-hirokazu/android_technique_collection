@@ -48,7 +48,7 @@ jobs:
         if: ${{ always() }}
         with:
           name: screenshot-diff
-          path: screenshots/*
+          path: screenshots/compare/*
           retention-days: 10
 
       - name: Save PR number

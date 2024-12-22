@@ -107,9 +107,10 @@ kapt {
     correctErrorTypes = true
 }
 
+@OptIn(ExperimentalRoborazziApi::class)
 roborazzi {
     outputDir.set(rootProject.file("screenshots"))
-    @OptIn(ExperimentalRoborazziApi::class)
+    compare.outputDir.set(rootProject.file("screenshots/compare"))
     generateComposePreviewRobolectricTests {
         enable = true
         // The package names to scan for Composable Previews.
