@@ -44,3 +44,4 @@ jobs:
           name: screenshots
           path: screenshots/*
           retention-days: 30
+          overwrite: true
