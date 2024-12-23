@@ -94,23 +94,53 @@ jobs:
           BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         shell: bash
         run: |
-          # _compare.pngで終わるファイルをscreenshots/compare/フォルダから探す
+          # _compare.pngで終わるファイルを検索する
           echo "[_compare.png]で終わるファイルを検索中..."
-          files=$(find . -type f -name "*_compare.png" | grep "screenshots/compare/" | grep -E "^[a-zA-Z0-9_./-]+$")
-          echo "見つかったファイル一覧: $files"
+          files=$(find . -type f -name "*_compare.png")
+
+          # 検索結果をログに出力
+          if [[ -z "$files" ]]; then
+            echo "該当するファイルが見つかりませんでした。"
+            exit 0
+          else
+            echo "見つかったファイル一覧:"
+            echo "$files" | while read -r file; do
+              echo "- $file"
+            done
+          fi
+
+          # 有効なファイルのみをフィルタリング
+          valid_files=()
+          echo "有効なファイル名を確認中..."
+          while read -r file; do
+            if [[ "$file" =~ ^[a-zA-Z0-9_./-]+$ ]]; then
+              echo "有効なファイル名: $file"
+              valid_files+=("$file")
+            else
+              echo "無効なファイル名: $file"
+            fi
+          done <<< "$files"
+
+          # 有効なファイルがない場合の対応
+          if [[ ${#valid_files[@]} -eq 0 ]]; then
+            echo "有効なファイルが見つかりませんでした。"
+            exit 0
+          fi
+
           # ランダムな区切り文字を生成
           delimiter="$(openssl rand -hex 8)"
           echo "生成された区切り文字: $delimiter"
           {
             echo "reports<<${delimiter}"
             # Markdownテーブルのヘッダーを作成
-            echo "ベースブランチとの差分スナップショットレポート: ${{ github.event.workflow_run.event  == 'pull_request' && github.event.workflow_run.event.pull_request.base.ref || github.event.repository.default_branch }}"
+            echo "ベースブランチとの差分スナップショットレポート: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.event.pull_request.base.ref || github.event.repository.default_branch }}"
             echo "| ファイル名 | イメージ |"
             echo "|-------|-------|"
           } >> "$GITHUB_OUTPUT"
           echo "MarkdownテーブルヘッダーをGITHUB_OUTPUTに書き込み完了"
-          # ファイルを1つずつ処理
-          for file in $files; do
+
+          # 有効なファイルを1つずつ処理
+          for file in "${valid_files[@]}"; do
             echo "処理中のファイル: $file"
             # ファイル名を取得し、20文字ごとに改行を挿入
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
@@ -119,19 +149,12 @@ jobs:
             echo "| [$fileName](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file) | ![](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file?raw=true) |" >> "$GITHUB_OUTPUT"
             echo "$file のテーブル行をGITHUB_OUTPUTに書き込み完了"
           done
+
           # GITHUB_OUTPUTへの書き込み終了
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
           echo "区切り文字をGITHUB_OUTPUTに書き込み完了"
           # スクリプトの終了を示す
           echo "スクリプト実行完了"
-      - name: Find Comment
-        uses: peter-evans/find-comment@v3
-        id: fc
-        if: steps.generate-diff-reports.outputs.reports != ''
-        with:
-          issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Snapshot diff report
 
       - name: Add or update comment on PR
         uses: peter-evans/create-or-update-comment@v4
