@@ -48,17 +48,28 @@ jobs:
         shell: bash
         run: |
           # プロジェクトルートのファイルリストを取得
-          echo "@@@Checking project root for 'screenshots' directory..."
+          echo "Checking project root for 'screenshots' directory..."
           if [ -d "./screenshots" ]; then
-            echo "@@@Found 'screenshots' directory in project root."
+            echo "Found 'screenshots' directory in project root."
             ls -R ./screenshots
           else
-            echo "'@@@screenshots' directory not found in project root. Searching for its location..."
-            # 他の場所にあるかを検索
+            echo "'screenshots' directory not found in project root. Searching for its location..."
+
+            # プロジェクト全体をデバッグ出力
+            echo "Listing all directories in the project for debugging:"
+            find . -type d | sort
+
+            # screenshots ディレクトリを検索
             find . -type d -name "screenshots" | while read -r dir; do
-              echo "@@@Found 'screenshots' directory at: $dir"
+              echo "Found 'screenshots' directory at: $dir"
               ls -R "$dir"
             done
+
+            # 検索結果が空の場合のエラーメッセージ
+            found_dirs=$(find . -type d -name "screenshots")
+            if [ -z "$found_dirs" ]; then
+              echo "No 'screenshots' directory found in the project."
+            fi
           fi
 
       # 5. スクリーンショット比較テストを実行
