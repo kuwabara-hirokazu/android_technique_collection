@@ -43,31 +43,40 @@ jobs:
           workflow: store_screenshots.yml
           branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
 
-      # 4.1 アーティファクトの配置場所を確認してログに出力
-      - name: Verify downloaded artifact location
+      # 4.1 アーティファクトの配置場所と内容を確認
+      - name: Verify downloaded and extracted artifact
         shell: bash
         run: |
-          # プロジェクトルートのファイルリストを取得
-          echo "Checking project root for 'screenshots' directory..."
+          echo "Checking for downloaded 'screenshots.zip' file..."
+          if [ -f "./screenshots.zip" ]; then
+            echo "'screenshots.zip' file found in project root."
+            echo "Listing contents of 'screenshots.zip':"
+            unzip -l ./screenshots.zip
+          else
+            echo "'screenshots.zip' file not found in project root. Searching for its location..."
+            zip_file=$(find . -type f -name "screenshots.zip")
+            if [ -n "$zip_file" ]; then
+              echo "'screenshots.zip' file found at: $zip_file"
+              echo "Listing contents of '$zip_file':"
+              unzip -l "$zip_file"
+            else
+              echo "No 'screenshots.zip' file found in the project."
+            fi
+          fi
+
+          echo "Checking for extracted 'screenshots' directory..."
           if [ -d "./screenshots" ]; then
             echo "Found 'screenshots' directory in project root."
+            echo "Listing contents of 'screenshots' directory:"
             ls -R ./screenshots
           else
             echo "'screenshots' directory not found in project root. Searching for its location..."
-
-            # プロジェクト全体をデバッグ出力
-            echo "Listing all directories in the project for debugging:"
-            find . -type d | sort
-
-            # screenshots ディレクトリを検索
-            find . -type d -name "screenshots" | while read -r dir; do
-              echo "Found 'screenshots' directory at: $dir"
-              ls -R "$dir"
-            done
-
-            # 検索結果が空の場合のエラーメッセージ
-            found_dirs=$(find . -type d -name "screenshots")
-            if [ -z "$found_dirs" ]; then
+            extracted_dir=$(find . -type d -name "screenshots")
+            if [ -n "$extracted_dir" ]; then
+              echo "'screenshots' directory found at: $extracted_dir"
+              echo "Listing contents of '$extracted_dir':"
+              ls -R "$extracted_dir"
+            else
               echo "No 'screenshots' directory found in the project."
             fi
           fi
