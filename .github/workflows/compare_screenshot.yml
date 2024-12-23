@@ -36,7 +36,7 @@ jobs:
 
       # 4. 過去のスクリーンショットアーティファクトをダウンロード（必要ならエラー無視）
       - name: Download previous screenshots
-        uses: actions/download-artifact@v3
+        uses: dawidd6/action-download-artifact@v3
         continue-on-error: true
         with:
           name: screenshots
@@ -70,7 +70,7 @@ jobs:
 
       # 8. スクリーンショット差分のアーティファクトをダウンロード
       - name: Download screenshot diff
-        uses: actions/download-artifact@v3
+        uses: dawidd6/action-download-artifact@v3
         with:
           name: screenshot-diff
           path: screenshot-diff
