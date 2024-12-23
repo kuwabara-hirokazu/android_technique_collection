@@ -1,4 +1,4 @@
-name: Compare Screenshot with Comment
+name: compare screenshot with comment
 
 on:
   pull_request:
