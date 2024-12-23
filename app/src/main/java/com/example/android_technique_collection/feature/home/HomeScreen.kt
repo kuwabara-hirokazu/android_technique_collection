@@ -42,6 +42,12 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = onNavigateToSearch,
+                colors = ButtonColors(
+                    containerColor = Color.Red,
+                    contentColor = Color.White,
+                    disabledContainerColor = Color.Gray,
+                    disabledContentColor = Color.White
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
