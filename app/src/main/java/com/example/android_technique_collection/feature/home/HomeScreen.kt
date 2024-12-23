@@ -39,7 +39,7 @@ fun HomeScreen(
             modifier = Modifier.padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = onNavigateToSearch,
                 colors = ButtonColors(

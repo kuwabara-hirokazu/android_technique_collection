@@ -41,6 +41,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: screenshot
+          name: screenshots
           path: screenshots/*
           retention-days: 30
