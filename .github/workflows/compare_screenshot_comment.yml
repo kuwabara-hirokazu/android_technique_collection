@@ -96,7 +96,7 @@ jobs:
         run: |
           # _compare.pngで終わるファイルを検索する
           echo "[_compare.png]で終わるファイルを検索中..."
-          files=$(find . -type f -name "*_compare.png")
+          files=$(find ./screenshot-diff -type f -name "*_compare.png")
 
           # 検索結果をログに出力
           if [[ -z "$files" ]]; then
@@ -146,7 +146,7 @@ jobs:
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
             echo "処理後のファイル名: $fileName"
             # テーブル行をGITHUB_OUTPUTに書き込み
-            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file) | ![](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/${file#./screenshot-diff/}) | ![](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/${file#./screenshot-diff/}?raw=true) |" >> "$GITHUB_OUTPUT"
             echo "$file のテーブル行をGITHUB_OUTPUTに書き込み完了"
           done
 
