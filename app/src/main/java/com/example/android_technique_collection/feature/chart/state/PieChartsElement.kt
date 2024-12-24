@@ -27,7 +27,7 @@ data class PieChartsElement(
                 ),
                 PieChartsElement(
                     pieDegrees = calculatePieDegrees(10f),
-                    color = Color.DarkGray
+                    color = Color.Yellow
                 ),
             )
         }
