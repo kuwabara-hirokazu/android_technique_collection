@@ -46,11 +46,3 @@ jobs:
           path: screenshots
           retention-days: 30
           overwrite: true
-
-      - name: Verify directory structure
-        shell: bash
-        run: |
-          echo "Checking directory structure with tree:"
-          tree screenshots || echo "tree command is not available. Falling back to find."
-          echo "Checking directory structure with find:"
-          find screenshots || echo "No files or directories found in screenshots."

@@ -2,7 +2,6 @@ name: compare screenshot with comment
 
 on:
   pull_request:
-  workflow_dispatch: # 手動実行用
 
 permissions: {}
 
@@ -13,7 +12,6 @@ jobs:
 
     permissions:
       contents: write # clone, push branches
-      actions: write # upload/download artifacts
       pull-requests: write # comment on PRs
 
     steps:
@@ -34,7 +32,7 @@ jobs:
         with:
           gradle-version: wrapper
 
-      # 4. 過去のスクリーンショットアーティファクトをダウンロード（必要ならエラー無視）
+      # 4. 過去のスクリーンショットアーティファクトをダウンロード（エラー無視）
       - name: Download previous screenshots
         uses: dawidd6/action-download-artifact@v3
         continue-on-error: true
@@ -43,70 +41,30 @@ jobs:
           workflow: store_screenshots.yml
           branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
 
+      # 5. ファイルの整理
       - name: Organize downloaded files
         run: |
-          mkdir -p screenshots  # ディレクトリ作成
-          mv *.png screenshots/  # PNG ファイルを移動
-          echo "Moved files to 'screenshots/' directory."
+          mkdir -p screenshots
+          find . -maxdepth 1 -name "*.png" -exec mv {} screenshots/ \; || echo "No PNG files to move."
 
-      # 4.1 アーティファクトの配置場所と内容を確認
-      - name: Verify downloaded and extracted artifact
-        shell: bash
-        run: |
-          echo "Searching for downloaded screenshots directory..."
-          find . -type f | grep "screenshots" || echo "No screenshots found."
-          echo "Project directory structure:"
-          if command -v tree &> /dev/null; then
-            tree .
-          else
-            echo "tree command not available."
-          fi
-
-          echo "Checking for extracted 'screenshots' directory..."
-          if [ -d "./screenshots" ]; then
-            echo "Found 'screenshots' directory in project root."
-            echo "Listing contents of 'screenshots' directory:"
-            ls -R ./screenshots
-          else
-            echo "'screenshots' directory not found in project root. Searching for its location..."
-            extracted_dir=$(find . -type d -name "screenshots")
-            if [ -n "$extracted_dir" ]; then
-              echo "'screenshots' directory found at: $extracted_dir"
-              echo "Listing contents of '$extracted_dir':"
-              ls -R "$extracted_dir"
-            else
-              echo "No 'screenshots' directory found in the project."
-            fi
-          fi
-
-      # 5. スクリーンショット比較テストを実行
+      # 6. スクリーンショット比較テストを実行
       - name: Compare screenshot test
         id: compare-screenshot-test
         run: |
           ./gradlew compareRoborazziDebug --stacktrace
 
-      # 6. スクリーンショット差分を保存
+      # 7. スクリーンショット差分を保存
       - name: Save screenshot diff
         run: |
-          mkdir -p screenshot-diff  # 必要なら作成
-          cp -R **/build/outputs/roborazzi/* screenshot-diff/
-          echo "Saved screenshot diff to 'screenshot-diff/' directory."
-
-      # 7. スクリーンショット差分を直接確認
-      - name: Verify screenshot diff
-        run: |
-          echo "Listing contents of screenshot-diff directory:"
-          ls -R screenshot-diff || echo "No screenshot diff files found."
+          mkdir -p screenshot-diff
+          find **/build/outputs/roborazzi/ -type f -exec cp {} screenshot-diff/ \; || echo "No screenshot diff files found to save."
 
       # 8. 有効なファイルが存在するか確認
       - id: check-if-there-are-valid-files
         name: Check if there are valid files
         shell: bash
         run: |
-          # Find all the files ending with _compare.png
           mapfile -t files_to_add < <(find ./screenshot-diff -type f -name "*_compare.png")
-
-          # Check for invalid file names and add only valid ones
           exist_valid_files="false"
           for file in "${files_to_add[@]}"; do
             if [[ $file =~ ^[a-zA-Z0-9_./-]+$ ]]; then
