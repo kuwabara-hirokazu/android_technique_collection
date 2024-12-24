@@ -103,20 +103,19 @@ jobs:
           branch_name="${{ github.head_ref || github.run_id }}"
           repo_name="${{ github.repository }}"
           timestamp=$(date +%s)
+          temp_output_file=$(mktemp)
           {
             echo "reports<<${delimiter}"
             echo "<!-- screenshot-diff-comment -->"
             echo "| ファイル名 | イメージ |"
             echo "|-------|-------|"
-          } >> "$GITHUB_OUTPUT"
+          } > "$temp_output_file"
           for file in $files; do
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-            {
-              echo "| [$fileName](https://github.com/${repo_name}/blob/${branch_name}/screenshot-diff/${file#./screenshot-diff/}) |"
-              echo "![Image](https://github.com/${repo_name}/blob/${branch_name}/screenshot-diff/${file#./screenshot-diff/}?raw=true&timestamp=${timestamp}) |"
-            } >> "$GITHUB_OUTPUT"
+            echo "| [$fileName](https://github.com/${repo_name}/blob/${branch_name}/screenshot-diff/${file#./screenshot-diff/}) | ![Image](https://github.com/${repo_name}/blob/${branch_name}/screenshot-diff/${file#./screenshot-diff/}?raw=true&timestamp=${timestamp}) |" >> "$temp_output_file"
           done
-          echo "${delimiter}" >> "$GITHUB_OUTPUT"
+          echo "${delimiter}" >> "$temp_output_file"
+          cat "$temp_output_file" >> "$GITHUB_OUTPUT"
 
       # 11. 既存のコメントを検索
       - id: find-comment
