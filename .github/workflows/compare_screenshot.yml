@@ -43,6 +43,12 @@ jobs:
           workflow: store_screenshots.yml
           branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
 
+      - name: Organize downloaded files
+        run: |
+          mkdir -p screenshots  # ディレクトリ作成
+          mv *.png screenshots/  # PNG ファイルを移動
+          echo "Moved files to 'screenshots/' directory."
+
       # 4.1 アーティファクトの配置場所と内容を確認
       - name: Verify downloaded and extracted artifact
         shell: bash
