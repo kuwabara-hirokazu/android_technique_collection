@@ -16,7 +16,7 @@ import androidx.constraintlayout.compose.Dimension
 
 @Composable
 fun BarChart() {
-    val dataPoints = listOf(50, -40, -10, 30, 60, 100) // グラフに表示するデータポイント
+    val dataPoints = listOf(50, -70, -10, 30, 60, 100) // グラフに表示するデータポイント
 
     ConstraintLayout(
         modifier = Modifier.padding(16.dp)
