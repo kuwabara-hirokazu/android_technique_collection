@@ -85,35 +85,20 @@ jobs:
         run: |
           ./gradlew compareRoborazziDebug --stacktrace
 
-      # 6. スクリーンショット差分をアップロード
-      - uses: actions/upload-artifact@v4
-        if: ${{ always() }}
-        with:
-          name: screenshot-diff
-          path: |
-            **/build/outputs/roborazzi
-          retention-days: 10
-          overwrite: true
-
-      # 7. プルリクエスト番号を保存
-      - name: Save PR number
-        if: ${{ github.event_name == 'pull_request' }}
+      # 6. スクリーンショット差分を保存
+      - name: Save screenshot diff
         run: |
-          mkdir -p ./pr
-          echo ${{ github.event.number }} > ./pr/NR
-      - uses: actions/upload-artifact@v4
-        with:
-          name: pr
-          path: pr/
+          mkdir -p screenshot-diff  # 必要なら作成
+          cp -R **/build/outputs/roborazzi/* screenshot-diff/
+          echo "Saved screenshot diff to 'screenshot-diff/' directory."
 
-      # 8. スクリーンショット差分のアーティファクトをダウンロード
-      - name: Download screenshot diff
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          name: screenshot-diff
-          path: screenshot-diff
+      # 7. スクリーンショット差分を直接確認
+      - name: Verify screenshot diff
+        run: |
+          echo "Listing contents of screenshot-diff directory:"
+          ls -R screenshot-diff || echo "No screenshot diff files found."
 
-      # 9. 有効なファイルが存在するか確認
+      # 8. 有効なファイルが存在するか確認
       - id: check-if-there-are-valid-files
         name: Check if there are valid files
         shell: bash
@@ -131,7 +116,7 @@ jobs:
           done
           echo "exist_valid_files=$exist_valid_files" >> "$GITHUB_OUTPUT"
 
-      # 10. 差分をコミットしてコンパニオンブランチにプッシュ
+      # 9. 差分をコミットしてコンパニオンブランチにプッシュ
       - id: push-screenshot-diff
         shell: bash
         if: steps.check-if-there-are-valid-files.outputs.exist_valid_files == 'true'
@@ -147,7 +132,7 @@ jobs:
           git commit -m "Add screenshot diff"
           git push origin HEAD:"refs/heads/$BRANCH_NAME" -f
 
-      # 11. 差分レポートを生成
+      # 10. 差分レポートを生成
       - id: generate-diff-reports
         name: Generate diff reports
         if: steps.check-if-there-are-valid-files.outputs.exist_valid_files == 'true'
@@ -168,7 +153,7 @@ jobs:
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
-      # 12. プルリクエストにコメントを追加または更新
+      # 11. プルリクエストにコメントを追加または更新
       - name: Add or update comment on PR
         uses: peter-evans/create-or-update-comment@v4
         if: steps.generate-diff-reports.outputs.reports != ''
@@ -178,7 +163,7 @@ jobs:
           body: ${{ steps.generate-diff-reports.outputs.reports }}
           edit-mode: replace
 
-      # 13. 古いコンパニオンブランチのクリーンアップ
+      # 12. 古いコンパニオンブランチのクリーンアップ
       - name: Cleanup outdated companion branches
         run: |
           git branch -r --format="%(refname:lstrip=3)" | grep companion_ | while read -r branch; do
