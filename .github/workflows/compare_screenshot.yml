@@ -50,7 +50,10 @@ jobs:
           echo "Searching for downloaded screenshots directory..."
           find . -type f | grep "screenshots" || echo "No screenshots found."
           echo "Project directory structure:"
-          tree . || echo "tree command not available."
+          if command -v tree &> /dev/null; then
+            tree .
+          else
+            echo "tree command not available."
           fi
 
           echo "Checking for extracted 'screenshots' directory..."
