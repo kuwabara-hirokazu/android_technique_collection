@@ -84,7 +84,8 @@ jobs:
         if: ${{ always() }}
         with:
           name: screenshot-diff
-          path: screenshots/compare/*
+          path: |
+            **/build/outputs/roborazzi
           retention-days: 10
           overwrite: true
 
