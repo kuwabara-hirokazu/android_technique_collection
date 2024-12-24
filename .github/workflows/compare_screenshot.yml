@@ -47,21 +47,10 @@ jobs:
       - name: Verify downloaded and extracted artifact
         shell: bash
         run: |
-          echo "Checking for downloaded 'screenshots.zip' file..."
-          if [ -f "./screenshots.zip" ]; then
-            echo "'screenshots.zip' file found in project root."
-            echo "Listing contents of 'screenshots.zip':"
-            unzip -l ./screenshots.zip
-          else
-            echo "'screenshots.zip' file not found in project root. Searching for its location..."
-            zip_file=$(find . -type f -name "screenshots.zip")
-            if [ -n "$zip_file" ]; then
-              echo "'screenshots.zip' file found at: $zip_file"
-              echo "Listing contents of '$zip_file':"
-              unzip -l "$zip_file"
-            else
-              echo "No 'screenshots.zip' file found in the project."
-            fi
+          echo "Searching for downloaded screenshots directory..."
+          find . -type f | grep "screenshots" || echo "No screenshots found."
+          echo "Project directory structure:"
+          tree . || echo "tree command not available."
           fi
 
           echo "Checking for extracted 'screenshots' directory..."
