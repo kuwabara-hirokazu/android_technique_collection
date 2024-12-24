@@ -102,6 +102,7 @@ jobs:
           delimiter="$(openssl rand -hex 8)"
           {
             echo "reports<<${delimiter}"
+            echo "<!-- screenshot-diff-comment -->"
             echo "| ファイル名 | イメージ |"
             echo "|-------|-------|"
           } >> "$GITHUB_OUTPUT"
@@ -111,17 +112,25 @@ jobs:
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
-      # 11. プルリクエストにコメントを追加または更新
+      # 11. 既存のコメントを検索
+      - id: find-comment
+        name: Find existing comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: "<!-- screenshot-diff-comment -->" # 一意の識別子で既存コメントを検索
+
+      # 12. プルリクエストにコメントを追加または更新
       - name: Add or update comment on PR
         uses: peter-evans/create-or-update-comment@v4
         if: steps.generate-diff-reports.outputs.reports != ''
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
           body: ${{ steps.generate-diff-reports.outputs.reports }}
           edit-mode: replace
 
-      # 12. 古いコンパニオンブランチのクリーンアップ
+      # 13. 古いコンパニオンブランチのクリーンアップ
       - name: Cleanup outdated companion branches
         run: |
           git branch -r --format="%(refname:lstrip=3)" | grep companion_ | while read -r branch; do
