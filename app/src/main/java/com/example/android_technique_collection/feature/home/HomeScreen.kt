@@ -62,14 +62,6 @@ fun HomeScreen(
             ) {
                 Text(text = stringResource(R.string.to_graph))
             }
-            Button(
-                onClick = onNavigateToChart,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(text = "TODO")
-            }
         }
     }
 }
