@@ -100,9 +100,6 @@ jobs:
         run: |
           files=$(find ./screenshot-diff -type f -name "*_compare.png")
           delimiter="$(openssl rand -hex 8)"
-          branch_name="${{ github.head_ref || github.run_id }}"
-          repo_name="${{ github.repository }}"
-          timestamp=$(date +%s)
           temp_output_file=$(mktemp)
           {
             echo "reports<<${delimiter}"
@@ -112,7 +109,7 @@ jobs:
           } > "$temp_output_file"
           for file in $files; do
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-            echo "| [$fileName](https://github.com/${repo_name}/blob/${branch_name}/screenshot-diff/${file#./screenshot-diff/}) | ![Image](https://github.com/${repo_name}/blob/${branch_name}/screenshot-diff/${file#./screenshot-diff/}?raw=true&timestamp=${timestamp}) |" >> "$temp_output_file"
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/${file#./screenshot-diff/}) | ![](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/${file#./screenshot-diff/}?raw=true) |" >> "$temp_output_file"
           done
           echo "${delimiter}" >> "$temp_output_file"
           cat "$temp_output_file" >> "$GITHUB_OUTPUT"
