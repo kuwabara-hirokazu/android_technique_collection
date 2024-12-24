@@ -100,6 +100,9 @@ jobs:
         run: |
           files=$(find ./screenshot-diff -type f -name "*_compare.png")
           delimiter="$(openssl rand -hex 8)"
+          branch_name="${{ github.head_ref || github.run_id }}"
+          repo_name="${{ github.repository }}"
+          timestamp=$(date +%s)
           {
             echo "reports<<${delimiter}"
             echo "<!-- screenshot-diff-comment -->"
@@ -108,7 +111,10 @@ jobs:
           } >> "$GITHUB_OUTPUT"
           for file in $files; do
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/${file#./screenshot-diff/}) | ![](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/${file#./screenshot-diff/}?raw=true) |" >> "$GITHUB_OUTPUT"
+            {
+              echo "| [$fileName](https://github.com/${repo_name}/blob/${branch_name}/screenshot-diff/${file#./screenshot-diff/}) |"
+              echo "![Image](https://github.com/${repo_name}/blob/${branch_name}/screenshot-diff/${file#./screenshot-diff/}?raw=true&timestamp=${timestamp}) |"
+            } >> "$GITHUB_OUTPUT"
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
