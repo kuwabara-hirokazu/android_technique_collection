@@ -4,7 +4,18 @@ import androidx.compose.ui.tooling.preview.Preview
 
 annotation class DelayedPreview(val delay: Long)
 
-@Preview // default preview
-@Preview(locale = "ja")
-@Preview(device = "spec:width=720px,height=1280px,dpi=300",  locale = "ja", fontScale = 2f)
+@Preview(name = "Default Language")
+@Preview(name = "Japanese", locale = "ja")
+@Preview(
+    name = "Large Display Size",
+    locale = "ja",
+    fontScale = 2f,
+    device = "spec:width=1080px,height=1920px,dpi=420"
+)
+@Preview(
+    name = "Small Display Size",
+    locale = "ja",
+    fontScale = 2f,
+    device = "spec:width=360px,height=640px,dpi=160"
+)
 annotation class MultiPreviews
