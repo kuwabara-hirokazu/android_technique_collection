@@ -7,7 +7,7 @@ annotation class DelayedPreview(val delay: Long)
 @Preview(name = "Default")
 @Preview(name = "Japanese", locale = "ja")
 @Preview(
-    name = "Large_Font",
+    name = "LargeFont",
     locale = "ja",
     fontScale = 2f,
 )
