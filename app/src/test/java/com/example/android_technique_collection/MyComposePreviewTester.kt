@@ -1,6 +1,5 @@
 package com.example.android_technique_collection
 
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -8,21 +7,18 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Density
-import androidx.test.core.app.ApplicationProvider
 import com.example.android_technique_collection.ui.common.preview.DelayedPreview
 import com.example.android_technique_collection.ui.common.preview.MultiPreviews
 import com.github.takahirom.roborazzi.ComposePreviewTester
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.Shadows
-import org.robolectric.shadows.ShadowDisplay
 import sergio.sastre.composable.preview.scanner.android.AndroidComposablePreviewScanner
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.android.screenshotid.AndroidPreviewScreenshotIdBuilder
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 import sergio.sastre.composable.preview.scanner.core.preview.getAnnotation
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalRoborazziApi::class)
 class MyComposePreviewTester : ComposePreviewTester<AndroidPreviewInfo> {
@@ -112,26 +108,12 @@ fun ComposablePreview<AndroidPreviewInfo>.myApplyToRobolectricConfiguration() {
     val preview = this
 
     // 画面サイズ
-    if (preview.previewInfo.widthDp != -1 && preview.previewInfo.heightDp != -1) {
-        setDisplaySize(preview.previewInfo.widthDp, preview.previewInfo.heightDp)
+    if (preview.previewInfo.widthDp == 360 && preview.previewInfo.heightDp == 640) {
+        RuntimeEnvironment.setQualifiers(RobolectricDeviceQualifiers.SmallPhone)
     }
 
     // ロケールの設定
     if (preview.previewInfo.locale.isNotEmpty()) {
         RuntimeEnvironment.setQualifiers("+${preview.previewInfo.locale}")
-    }
-}
-
-private fun setDisplaySize(widthDp: Int, heightDp: Int) {
-    val context = ApplicationProvider.getApplicationContext<Context>()
-    val display = ShadowDisplay.getDefaultDisplay()
-    val density = context.resources.displayMetrics.density
-    widthDp.let {
-        val widthPx = (widthDp * density).roundToInt()
-        Shadows.shadowOf(display).setWidth(widthPx)
-    }
-    heightDp.let {
-        val heightPx = (heightDp * density).roundToInt()
-        Shadows.shadowOf(display).setHeight(heightPx)
     }
 }
