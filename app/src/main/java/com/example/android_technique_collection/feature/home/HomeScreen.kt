@@ -68,6 +68,20 @@ fun HomeScreen(
             ) {
                 Text(text = stringResource(R.string.to_graph))
             }
+            Button(
+                onClick = onNavigateToChart,
+                colors = ButtonColors(
+                    containerColor = Color.Blue,
+                    contentColor = Color.White,
+                    disabledContainerColor = Color.Gray,
+                    disabledContentColor = Color.White
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(text = "長いいいいいいいいいいテキストボタン")
+            }
         }
     }
 }
